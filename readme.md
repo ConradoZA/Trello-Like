@@ -17,4 +17,8 @@
 
 - [x] Poder editar titulo tarea
 
+- [x] Poder mover columnas a la posición concreta donde las sueltas
+
+- [x] Poder mover tareas a la posición concreta donde las sueltas
+
 - [ ] Poder añadir subtareas

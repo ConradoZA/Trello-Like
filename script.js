@@ -127,7 +127,7 @@ const removeTask = (taskId) => {
     document.getElementById(taskId).remove();
 }
 
-/* Drag & Drop de Tareas*/
+/* Drag & Drop de Tareas, sensible a la posición*/
 const updateDropTask = (currentColumn, currentTask, position) => {
     const columns = getLocalStorageColumns();
     const updatedTasks = columns.find(column => column.id === +currentColumn);
@@ -137,7 +137,6 @@ const updateDropTask = (currentColumn, currentTask, position) => {
 }
 const dragTask = (event, taskId, oldColumnId) => {
         event.dataTransfer.setData("taskId", taskId);
-        /*     const columnId = event.target.parentElement.parentElement.id; */
         event.dataTransfer.setData("oldColumnId", oldColumnId);
 
     }
@@ -159,7 +158,6 @@ const dragTask = (event, taskId, oldColumnId) => {
         }
     } */
 
-/* SUPUESTAMENTE, con esto se cambia a la posición adecuada */
 const dropTask = (event) => {
     const taskId = event.dataTransfer.getData("taskId");
     const oldColumnId = event.dataTransfer.getData("oldColumnId");
@@ -172,8 +170,6 @@ const dropTask = (event) => {
         const currentTask = oldColumn.find(task => task.id === +taskId);
         removeTaskFromLocalStorage(taskId, oldColumnId);
         updateDropTask(currentColumn, currentTask, position);
-        /*         localStorage.setItem('columns', JSON.stringify(updatedTasks));
-                renderColumns(updatedTasks); */
     }
 }
 

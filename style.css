@@ -101,7 +101,7 @@ input.addColumn::placeholder {
     width: 90%;
     padding: 0.3rem;
     margin: .3rem 0;
-    border: solid #00000044 1px;
+    border: solid #000000 1px;
     border-radius: 0.4rem;
     cursor: pointer;
     background-color: #00fc8633;
