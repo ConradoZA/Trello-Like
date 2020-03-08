@@ -127,50 +127,56 @@ const removeTask = (taskId) => {
     document.getElementById(taskId).remove();
 }
 
-/* Drag & Drop de Tareas....ESPERO que sensible a la posición */
-const dragTask = (event, taskId, columnId) => {
-    event.dataTransfer.setData("taskId", taskId);
-    /*     const columnId = event.target.parentElement.parentElement.id; */
-    event.dataTransfer.setData("columnId", columnId);
-    console.log(taskId)
-    console.log(columnId)
+/* Drag & Drop de Tareas*/
+const updateDropTask = (currentColumn, currentTask, position) => {
+    const columns = getLocalStorageColumns();
+    const updatedTasks = columns.find(column => column.id === +currentColumn);
+    updatedTasks.tasks.splice(position, 0, currentTask);
+    localStorage.setItem('columns', JSON.stringify(columns));
+    renderColumns(columns);
 }
+const dragTask = (event, taskId, oldColumnId) => {
+        event.dataTransfer.setData("taskId", taskId);
+        /*     const columnId = event.target.parentElement.parentElement.id; */
+        event.dataTransfer.setData("oldColumnId", oldColumnId);
 
-const dropTask = (event) => {
-    const taskId = event.dataTransfer.getData("taskId");
-    const oldColumnId = event.dataTransfer.getData("columnId");
-    console.log(taskId)
-    console.log(oldColumnId)
-    const task = document.getElementById(taskId);
-    if (event.target.classList.contains('tasks') && task) {
-        event.target.appendChild(task)
-        const newColumnId = event.target.parentElement.id;
-        let columns = getLocalStorageColumns();
-        const taskObj = columns.flatMap(column => column ? column.tasks : []).find(task => task.id === +taskId);
-        columns = removeTaskFromLocalStorage(taskId, oldColumnId);
-        columns.find(column => column.id === +newColumnId).tasks.push(taskObj);
-        localStorage.setItem("columns", JSON.stringify(columns))
     }
-}
+    /* this works fine ¡¡¡¡¡DO NOT TOUCH!!!!
+    const dropTask = (event) => {
+        const taskId = event.dataTransfer.getData("taskId");
+        const oldColumnId = event.dataTransfer.getData("oldColumnId");
+        console.log(taskId)
+        console.log(oldColumnId)
+        const task = document.getElementById(taskId);
+        if (event.target.classList.contains('tasks') && task) {
+            event.target.appendChild(task)
+            const newColumnId = event.target.parentElement.id;
+            let columns = getLocalStorageColumns();
+            const taskObj = columns.flatMap(column => column ? column.tasks : []).find(task => task.id === +taskId);
+            columns = removeTaskFromLocalStorage(taskId, oldColumnId);
+            columns.find(column => column.id === +newColumnId).tasks.push(taskObj);
+            localStorage.setItem("columns", JSON.stringify(columns))
+        }
+    } */
 
-/* SUPUESTAMENTE, con esto se cambia a la posición adecuada
+/* SUPUESTAMENTE, con esto se cambia a la posición adecuada */
 const dropTask = (event) => {
     const taskId = event.dataTransfer.getData("taskId");
-    const oldColumnId = event.dataTransfer.getData("columnId");
-    console.log(oldColumnId);
+    const oldColumnId = event.dataTransfer.getData("oldColumnId");
     const position = Math.floor(event.offsetY / 31);
     if (event.target.classList.contains('tasks')) {
         const columns = getLocalStorageColumns();
-        const currentColumn = event.target.parentElement.id;
-        const currentTask = columns.find(column => column.id === +oldColumnId).find(task => task.id === +taskId);
-        removeTaskFromLocalStorage = (taskId, oldColumnId);
-        const updatedTasks= columns.find(column => column.id === +currentColumn).tasks;
-        updatedTasks.splice(position, 0, currentTask);
-        localStorage.setItem('columns', JSON.stringify(updatedTasks));
-        renderColumns(updatedColumns);
+        const newColumn = event.target.parentElement;
+        const currentColumn = newColumn.id;
+        const oldColumn = columns.find(column => column.id === +oldColumnId).tasks;
+        const currentTask = oldColumn.find(task => task.id === +taskId);
+        removeTaskFromLocalStorage(taskId, oldColumnId);
+        updateDropTask(currentColumn, currentTask, position);
+        /*         localStorage.setItem('columns', JSON.stringify(updatedTasks));
+                renderColumns(updatedTasks); */
     }
 }
-*/
+
 
 
 
@@ -179,7 +185,7 @@ const addTask = (event, columnId) => {
     if (event.key === 'Enter') {
         const taskId = Date.now();
         document.getElementById(columnId).children[1].innerHTML += `
-        <div class="task" id="${taskId}" draggable ondragstart ="dragTask(event,${taskId},${column.id})" >
+        <div class="task" id="${taskId}" draggable ondragstart ="dragTask(event,${taskId},${columnId})" >
         <h5 contentEditable onkeydown="preventEnter(event)" onkeyup="changeTaskTitleEnter(event,${taskId},${columnId})" onBlur="changeTaskTitleBlur(event, ${taskId}, ${columnId})">${event.target.value}</h5>
             <i class="far fa-trash-alt" onclick="removeTask(${taskId})"></i>
         </div>`
