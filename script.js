@@ -153,21 +153,23 @@ const dropTask = (event) => {
     }
 }
 
-/* SUPUESTAMENTE, con esto se cambia a la posición adecuada 
+/* SUPUESTAMENTE, con esto se cambia a la posición adecuada
 const dropTask = (event) => {
     const taskId = event.dataTransfer.getData("taskId");
     const oldColumnId = event.dataTransfer.getData("columnId");
+    console.log(oldColumnId);
     const position = Math.floor(event.offsetY / 31);
-    if (event.target.classList.contains('tasks') && task) {
+    if (event.target.classList.contains('tasks')) {
         const columns = getLocalStorageColumns();
-        const currentColumn = event.target.parentElement.parentElement.id;
-        const currentTask=currentColumn.find(task=>task.id=== +taskId);
-        const updatedColumns=columns.tasks.filter(task=>task.id !== +taskId);
-        updatedColumns.tasks.splice(position,0,currentTask);
-        localStorage.setItem('columns', JSON.stringify(updatedColumns));
+        const currentColumn = event.target.parentElement.id;
+        const currentTask = columns.find(column => column.id === +oldColumnId).find(task => task.id === +taskId);
+        const updatedTasks = currentTask.filter(task => task.id !== +taskId);
+        updatedTasks.splice(position, 0, currentTask);
+        localStorage.setItem('columns', JSON.stringify(updatedTasks));
         renderColumns(updatedColumns);
     }
- */
+}
+*/
 
 
 
