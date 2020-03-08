@@ -1,0 +1,132 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Work Sans', sans-serif;
+}
+
+.fondo {
+    background-image: url(./images/blackboard.jpg);
+    background-position: center;
+    background-attachment: fixed;
+    background-size: cover;
+    height: 100vh;
+}
+
+[draggable] {
+    user-select: none;
+    -webkit-user-drag: element;
+}
+
+main {
+    display: flex;
+    padding: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.tituloColumna>i {
+    font-size: 1.5rem;
+}
+
+input.addColumn {
+    all: unset;
+    padding: 0.5rem;
+    margin: 1rem;
+    width: 230px;
+    border: solid black 1px;
+    border-radius: 0.6rem;
+    background-color: #35001d;
+    color: #dddddd;
+}
+
+input.addColumn::placeholder {
+    color: #aaaaaa;
+}
+
+.column input {
+    all: unset;
+    background-color: #ffff99;
+    border-top: unset;
+    padding: 0.5em;
+    border-radius: 0 0 0.4em 0.4em;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 35vh;
+    margin: 0.6rem 0.2rem;
+    border: solid #000000d8 1px;
+    background-color: #ffff77;
+    transition: all 400ms;
+}
+
+.column:hover {
+    box-shadow: 10px 12px 20px -13px rgb(200, 200, 200);
+    transform: translateY(-0.3rem);
+    border: initial;
+}
+
+.tituloColumna {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.2em;
+    width: 100%;
+    border-radius: 0.5em 0.5em 0 0;
+    background-color: #ffff55;
+}
+
+.column h2 {
+    width: 100%;
+    font-family: 'Courgette', cursive;
+    padding: 0.4rem 0 0.2rem 1rem;
+}
+
+.tasks {
+    display: flex;
+    flex-direction: column;
+    /*     justify-content: space-evenly; */
+    align-items: center;
+    flex: 1;
+    width: 100%;
+}
+
+.task {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    padding: 0.3rem;
+    margin: .3rem 0;
+    border: solid #00000044 1px;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    background-color: #00fc8633;
+}
+
+.task:hover {
+    box-shadow: -2px -2px 3px #000000aa inset, 3px 3px 3px #dddddd88 inset;
+}
+
+.task>i {
+    font-size: 0.9rem;
+}
+
+@media (max-width: 600px) {
+    main {
+        display: flex;
+        justify-content: space-evenly;
+    }
+}
+
+@media (max-width: 461px) {
+    .fondo {
+        height: initial;
+    }
+    input.addColumn {
+        width: 75vw;
+    }
+}
