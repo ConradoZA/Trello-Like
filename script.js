@@ -19,8 +19,8 @@ const renderColumns = (columns) => {
         if (!column) return;
         let tasks = ``;
         column.tasks.forEach(task => {
-            tasks += `<div class="task" id="${task.id}" draggable ondragstart ="dragTask(event,${task.id})" >
-            <h5 contentEditable onkeydown="preventEnter(event)" onkeyup="changeTaskTitleEnter(event, ${task.id}, ${column.id})" onBlur="changeTaskTitleBlur(event, ${task.id}, ${column.id})">${task.title}</h5>
+            tasks += `<div class="task" id="${task.id}" draggable ondragstart ="dragTask(event,${task.id},${column.id})" >
+            <h5 contentEditable onkeydown="preventEnter(event)" onkeyup="changeTaskTitleEnter(event,${task.id},${column.id})" onBlur="changeTaskTitleBlur(event, ${task.id}, ${column.id})">${task.title}</h5>
             <i class="far fa-trash-alt" onclick="removeTask(${task.id})"></i>
         </div>`
         })
@@ -128,16 +128,19 @@ const removeTask = (taskId) => {
 }
 
 /* Drag & Drop de Tareas....ESPERO que sensible a la posición */
-const dragTask = (event, taskId) => {
-    event.dataTransfer.setData("id", taskId);
-    const columnId = event.target.parentElement.parentElement.id;
+const dragTask = (event, taskId, columnId) => {
+    event.dataTransfer.setData("taskId", taskId);
+    /*     const columnId = event.target.parentElement.parentElement.id; */
     event.dataTransfer.setData("columnId", columnId);
-
+    console.log(taskId)
+    console.log(columnId)
 }
 
-const dropTask = event => {
-    const taskId = event.dataTransfer.getData("id");
+const dropTask = (event) => {
+    const taskId = event.dataTransfer.getData("taskId");
     const oldColumnId = event.dataTransfer.getData("columnId");
+    console.log(taskId)
+    console.log(oldColumnId)
     const task = document.getElementById(taskId);
     if (event.target.classList.contains('tasks') && task) {
         event.target.appendChild(task)
@@ -150,19 +153,21 @@ const dropTask = event => {
     }
 }
 
-/* const dropColumn = (event) => {
-    if (event.target.classList.contains("main")) {
-        const id = event.dataTransfer.getData('columnId', event.target.id);
-        const position = Math.floor(event.pageX / 226.8); //determinamos la posición final de la columna a mover diviendo por el tamañao + el margin
-        const columns = getLocalStorageColumns(); //obtenemos las columnas del localStorage
-        const currentColumn = columns.find(column => column.id === +id); //buscamos la columna que estamos moviendo
-        const updatedColumns = columns.filter(column => column.id !== +id); //quitamos la columna a mover
-        updatedColumns.splice(position, 0, currentColumn); //insertamos la columna movida en la posición donde cae
-        localStorage.setItem('columns', JSON.stringify(updatedColumns)); //guardamos cambios en localStorage
-        renderColumns(updatedColumns); //actualizamos el DOM
+/* SUPUESTAMENTE, con esto se cambia a la posición adecuada 
+const dropTask = (event) => {
+    const taskId = event.dataTransfer.getData("taskId");
+    const oldColumnId = event.dataTransfer.getData("columnId");
+    const position = Math.floor(event.offsetY / 31);
+    if (event.target.classList.contains('tasks') && task) {
+        const columns = getLocalStorageColumns();
+        const currentColumn = event.target.parentElement.parentElement.id;
+        const currentTask=currentColumn.find(task=>task.id=== +taskId);
+        const updatedColumns=columns.tasks.filter(task=>task.id !== +taskId);
+        updatedColumns.tasks.splice(position,0,currentTask);
+        localStorage.setItem('columns', JSON.stringify(updatedColumns));
+        renderColumns(updatedColumns);
     }
-
-} */
+ */
 
 
 
@@ -171,8 +176,8 @@ const addTask = (event, columnId) => {
     if (event.key === 'Enter') {
         const taskId = Date.now();
         document.getElementById(columnId).children[1].innerHTML += `
-        <div class="task" id="${taskId}" draggable ondragstart ="dragTask(event,${taskId})" >
-        <h5 contentEditable onkeydown="preventEnter(event)" onkeyup="changeTaskTitleEnter(event, ${taskId}, ${columnId})" onBlur="changeTaskTitleBlur(event, ${taskId}, ${columnId})">${event.target.value}</h5>
+        <div class="task" id="${taskId}" draggable ondragstart ="dragTask(event,${taskId},${column.id})" >
+        <h5 contentEditable onkeydown="preventEnter(event)" onkeyup="changeTaskTitleEnter(event,${taskId},${columnId})" onBlur="changeTaskTitleBlur(event, ${taskId}, ${columnId})">${event.target.value}</h5>
             <i class="far fa-trash-alt" onclick="removeTask(${taskId})"></i>
         </div>`
 
