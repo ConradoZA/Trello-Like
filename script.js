@@ -163,7 +163,7 @@ const dropTask = (event) => {
         const columns = getLocalStorageColumns();
         const currentColumn = event.target.parentElement.id;
         const currentTask = columns.find(column => column.id === +oldColumnId).find(task => task.id === +taskId);
-        const updatedTasks = currentTask.filter(task => task.id !== +taskId);
+        const updatedTasks = columns.find(column => column.id === +currentColumn).filter(task=>task.id!==+taskId);
         updatedTasks.splice(position, 0, currentTask);
         localStorage.setItem('columns', JSON.stringify(updatedTasks));
         renderColumns(updatedColumns);
